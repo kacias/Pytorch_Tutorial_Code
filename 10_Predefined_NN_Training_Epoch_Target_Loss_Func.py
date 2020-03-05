@@ -62,7 +62,15 @@ summary(model, (3, 100, 100))
 #2) loss function
 #꼭 아래와 같이 2단계, 클래스 선언 후, 사용
 criterion = nn.MSELoss()
+#criterion = nn.SmoothL1Loss()
+#criterion = nn.L1Loss()
+#criterion = nn.Tanh()
+#criterion = nn.KLDivLoss()
 
+#criterion = nn.NLLLoss()
+#criterion = nn.CrossEntropyLoss()
+#criterion = nn.MarginRankingLoss()
+#criterion = nn.CosineEmbeddingLoss()
 
 
 #3) activation function
@@ -94,6 +102,11 @@ for i in range (100):
     #타겟값을 1로 바꾸어서 네트워크가 무조건 1만 출력하도록 만든다.
     target  = torch.ones_like(result)
 
+    '''
+    print(target.dtype)
+    target = target.long()
+    target = target.to(device)
+    '''
 
     #네트워크값과의 차이를 비교
     loss = criterion(result, target).to(device)
