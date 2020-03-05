@@ -25,7 +25,7 @@ import numpy as np
 from tensorboardX import SummaryWriter
 
 #1) 텐서보드 생성
-tf_summary = SummaryWriter()
+tf_summary = SummaryWriter("./")
 
 #cuda로 보낸다
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -42,8 +42,6 @@ model = models.vgg16(pretrained=True).to(device)
 print(model)
 
 
-
-
 print("========맨 뒤에 모듈 추가=========")
 my_layer2 = nn.Sigmoid()
 model.classifier.add_module("7", my_layer2)
@@ -56,7 +54,6 @@ print('========= Summary로 보기 =========')
 #뒤에 값이 들어갔을 때 내부 변환 상황을 보여줌
 #adaptive average pool이 중간에서 최종값을 바꿔주고 있음
 summary(model, (3, 100, 100))
-
 
 
 
@@ -109,19 +106,15 @@ for i in range (100):
     loss = criterion(result, target).to(device)
 
 
-
-
     #=============================
     #loss는 텐서이므로 item()
     print("epoch: {} loss:{} ".format(i, loss.item()))
-
 
 
     #================================
     #2) 텐서보드 값 입력
     tf_summary.add_scalar('loss/loss_a', loss.item(), i)
     tf_summary.add_scalar('learning_rate', learning_rate, i)
-
 
 
 
