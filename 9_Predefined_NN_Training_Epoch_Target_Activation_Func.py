@@ -1,11 +1,7 @@
 
 
-#Pretrained NN이 항상 1이 나오도록 학습시킨다.
-#Gound Truth를 1로 넣어주고 학습 시킨 후 모델 저장, 이후 test 해보면 1에 가까운 값이 나온다.
-#하지만 1을 넘기는 값이 나오는 문제가 발생.
-#Sigmoid를 맨 마지막에 추가하여 1로 맞추어 준다.
-#학습 후 test를 해보면 모두 1로 바뀌어 있는 것을 알 수 있다.
-
+#loss를 그래프로 표시하는 방법과 다양한 opt 함수를 테스트 해본다.
+#가장 그래프가 잘 나오는 opt 함수를 선택한다.
 
 
 import torch
@@ -16,6 +12,9 @@ from torch.autograd import Variable
 from torchsummary import summary
 
 
+import matplotlib.pyplot as plt
+import numpy as np
+
 #cuda로 보낸다
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -23,6 +22,12 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('========VGG 테스트 =========')
 print("========입력데이터 생성 [batch, color, image x, image y]=========")
 #이미지 사이즈를 어떻게 잡아도 vgg는 다 소화한다.
+
+
+#그래프 저장용
+loss_graph = []
+iter_graph = []
+
 
 
 
@@ -59,7 +64,9 @@ criterion = nn.MSELoss()
 
 #3) activation function
 learning_rate = 1e-4
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+#optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+#optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+optimizer = torch.optim.Adagrad(model.parameters(), lr=0.01)
 
 
 #모델이 학습 모드라고 알려줌
@@ -88,6 +95,10 @@ for i in range (100):
     #네트워크값과의 차이를 비교
     loss = criterion(result, target).to(device)
 
+    loss_graph.append(loss)
+    iter_graph.append(i)
+
+
     #=============================
     #loss는 텐서이므로 item()
     print("epoch: {} loss:{} ".format(i, loss.item()))
@@ -104,6 +115,15 @@ for i in range (100):
 
 
 #모델이 바뀌었으므로 모델 전체를 저장
-print("=========== 전체모델 저장 : VGG 처럼 모델 전체 저장==============")
-torch.save(model, 'trained_model_all.pt')
+#print("=========== 전체모델 저장 : VGG 처럼 모델 전체 저장==============")
+#torch.save(model, 'trained_model_all.pt')
+
+
+#loss 그래프 출력
+plt.plot(iter_graph, loss_graph, '-b', label='loss')
+plt.title('loss graph')
+plt.ylabel('loss')
+plt.legend(loc='upper left')
+plt.savefig("result3.png")  # should before show method
+plt.show()
 
