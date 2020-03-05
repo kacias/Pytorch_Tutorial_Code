@@ -25,7 +25,9 @@ import numpy as np
 from tensorboardX import SummaryWriter
 
 #1) 텐서보드 생성
-tf_summary = SummaryWriter("./")
+tf_summary = SummaryWriter()
+#tf_summary = SummaryWriter("./") #특정 폴더
+
 
 #cuda로 보낸다
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
