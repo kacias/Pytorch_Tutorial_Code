@@ -1,13 +1,15 @@
 
-#==============================================
+#=============================================================
 #Tensorboard를 테스트 해 본다.
 #설치
 #pip install tensorboard
 #pip install tensorboardX
 #https://seongkyun.github.io/others/2019/05/11/pytorch_tensorboard/
 #https://jangjy.tistory.com/343
-
+#코드 빌드 후, 터미널에서 아래 실행 후 웹사이트 방문
 #tensorboard --logdir = ./runs
+#==============================================================
+
 
 import torch
 
@@ -30,14 +32,6 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 print('========VGG 테스트 =========')
-print("========입력데이터 생성 [batch, color, image x, image y]=========")
-#이미지 사이즈를 어떻게 잡아도 vgg는 다 소화한다.
-
-
-#그래프 저장용
-loss_graph = []
-iter_graph = []
-
 
 
 #==========================================
@@ -110,24 +104,16 @@ for i in range (100):
     #타겟값을 1로 바꾸어서 네트워크가 무조건 1만 출력하도록 만든다.
     target  = torch.ones_like(result)
 
-    '''
-    print(target.dtype)
-    target = target.long()
-    target = target.to(device)
-    '''
 
     #네트워크값과의 차이를 비교
     loss = criterion(result, target).to(device)
 
-    loss_graph.append(loss)
-    iter_graph.append(i)
+
 
 
     #=============================
     #loss는 텐서이므로 item()
     print("epoch: {} loss:{} ".format(i, loss.item()))
-
-
 
 
 
@@ -148,20 +134,4 @@ for i in range (100):
 
 #3) 텐서보드 꼭 닫기
 tf_summary.close()
-
-#print("=========== 학습된 파라미터만 저장 ==============")
-#torch.save(model.state_dict(), 'trained_model.pt')
-
-#모델이 바뀌었으므로 모델 전체를 저장
-#print("=========== 전체모델 저장 : VGG 처럼 모델 전체 저장==============")
-#torch.save(model, 'trained_model_all.pt')
-
-
-#loss 그래프 출력
-plt.plot(iter_graph, loss_graph, '-b', label='loss')
-plt.title('loss graph')
-plt.ylabel('loss')
-plt.legend(loc='upper left')
-plt.savefig("result6.png")  # should before show method
-plt.show()
 
