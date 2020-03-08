@@ -54,6 +54,11 @@ learning_rate = 1e-2
 #learning_rate = 0.001  #이렇게 하면 부동 소수점 에러
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
+#========================================
+#learning rate 조절 시
+decay_epoch = [10, 20]
+scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=decay_epoch, gamma=0.1)
+#========================================
 
 #모델이 학습 모드라고 알려줌
 model.train()
@@ -92,7 +97,13 @@ for i in range (100):
     #저장된 grad값을 기준으로 activation func을 적용한다.
     optimizer.step()
 
+    #=============================
+    for param_group in optimizer.param_groups:
+        print(param_group['lr'])
 
+    scheduler.step()
+
+    #=============================
 
 print("=========== 학습된 파라미터만 저장 ==============")
 torch.save(model.state_dict(), 'trained_model.pt')
