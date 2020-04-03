@@ -13,6 +13,8 @@ installed:
 -  ``scikit-image``: For image io and transforms
 -  ``pandas``: For easier csv parsing
 """
+#Test
+
 
 from __future__ import print_function, division
 import os
@@ -375,6 +377,7 @@ for i in range(len(transformed_dataset)):
 dataloader = DataLoader(transformed_dataset, batch_size=4,
                         shuffle=True, num_workers=4)
 
+print("")
 
 # Helper function to show a batch
 def show_landmarks_batch(sample_batched):
@@ -407,6 +410,8 @@ for i_batch, sample_batched in enumerate(dataloader):
         plt.ioff()
         plt.show()
         break
+
+
 
 ######################################################################
 # Afterword: torchvision
