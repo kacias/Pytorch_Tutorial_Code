@@ -1,0 +1,8 @@
+    parser.add_argument('--experiment_name', dest='experiment_name',
+                        default=datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y"))
+
+    
+    return parser.parse_args(args)
+
+args = parse()
+print(args)
