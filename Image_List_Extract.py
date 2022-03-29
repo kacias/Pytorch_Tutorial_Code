@@ -8,7 +8,6 @@ file_list = os.listdir(path)
 print ("file_list: {}".format(file_list))
 
 
-
 f = open("image_list.txt", 'w')
 for i in file_list:
     data = "%s\n" % i
